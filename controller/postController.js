@@ -31,6 +31,19 @@ module.exports = {
     },
     
     /* 선택된 공간 조회 API 개발 */
+    readAllPostByCategory: async(req, res) => {
+        const { category } = req.body;
+        if(!category) {
+            console.log('필요한 값을 넣지 않았습니다.');
+            return res.status(sc.BAD_REQUEST).send(ut.fail(sc.BAD_REQUEST, rm.NULL_VALUE));
+        }
+        try {
+            const getReadAllPostByCategory = await postService.readAllPostByCategory(category);
+            return res.status(sc.OK).send(ut.success(sc.OK, rm.FIND_POST_SUCCESS, getReadAllPostByCategory));
+        } catch (err) {
+            return res.status(sc.INTERNAL_SERVER_ERROR).send(ut.fail(sc.INTERNAL_SERVER_ERROR, rm.FIND_POST_FAIL));
+        }
+    },
 
     // PostDetail API
     createPostDetail: async (req, res, next) => {

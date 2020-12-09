@@ -27,9 +27,19 @@ module.exports = {
     },
 
     /* 선택된 공간 조회 API 개발 */
-
-
-
+    readAllPostByCategory: async(category) => {
+        try {
+            const readAllPostByCategory = await Post.findAll({
+                where: {
+                    category
+                },
+                attributes: { exclude: ['id'] }
+            });
+            return readAllPostByCategory;
+        } catch (err) {
+            throw err;
+        }
+    },
 
 
     // PostDetail Service
