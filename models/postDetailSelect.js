@@ -1,24 +1,20 @@
 module.exports = (sequelize, DataTypes) => {
-    return sequelize.define('Post', {
+    return sequelize.define('PostDetailSelect', {
         title: {
             type: DataTypes.STRING(30),
             allowNull: false,
         },
-        address: {
+        contents: {
             type: DataTypes.TEXT(),
             allowNull: false,
         },
-        price: {
-            type: DataTypes.INTEGER(),
+        reservationTime: {
+            type: DataTypes.STRING(30),
             allowNull: false,
         },
-        postImageUrl: {
-            type: DataTypes.STRING(100),
-            allowNull: false,
-        },
-        category: {
-            type: DataTypes.STRING(100),
-            allowNull: false,
+        capacity: {
+            type: DataTypes.STRING(30),
+            allowNull: false
         }
     }, {
         freezeTableName: true,

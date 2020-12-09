@@ -13,15 +13,36 @@ if (config.use_env_variable) {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-// db.Post = require('./post')(sequelize, Sequelize);
-// db.Banner = require('./banner')(sequelize, Sequelize);
+/* Post */
+db.Post = require('./post')(sequelize, Sequelize);
+db.PostDetail = require('./postDetail')(sequelize, Sequelize);
+db.Facilities = require('./facilities')(sequelize, Sequelize);
+db.PostDetailSelect = require('./postDetailSelect')(sequelize, Sequelize);
+db.Hashtag = require('./hashtag')(sequelize, Sequelize);
+db.PostDetailImage = require('./postDetailImage')(sequelize, Sequelize);
 
-// /** 1 : N   User : Post */
-// db.User.hasMany(db.Post, { onDelete: 'cascade' });
-// db.Post.belongsTo(db.User);
+/* Banner */
+db.Banner = require('./banner')(sequelize, Sequelize);
 
-// /** N: M    User : Post => Like */
-// db.User.belongsToMany(db.Post, { through: 'Like', as: 'Liked' });
-// db.Post.belongsToMany(db.User, { through: 'Like', as: 'Liker' });
+
+/** 1 : 1   Post : PostDetail */
+db.Post.hasOne(db.PostDetail, { onDelete: 'cascade' });
+db.PostDetail.belongsTo(db.Post);
+
+/** 1 : 1   Post : PostDetailSelect */
+db.Post.hasOne(db.PostDetailSelect, { onDelete: 'cascade' });
+db.PostDetailSelect.belongsTo(db.Post);
+
+/** 1 : N   PostDetail : PostDetailImage */
+db.PostDetail.hasMany(db.PostDetailImage, { onDelete: 'cascade' });
+db.PostDetailImage.belongsTo(db.PostDetail);
+
+/** 1 : N   PostDetail : Facilities */
+db.PostDetail.hasMany(db.Facilities, {onDelete: 'cascade' })
+db.Facilities.belongsTo(db.PostDetail);
+
+/** N : M   Post : PostDetail => Hashtag */
+db.Post.belongsToMany(db.PostDetail, { through: 'Hashtag', as: 'hashed', onDelete: 'cascade' });
+db.PostDetail.belongsToMany(db.Post, { through: 'Hashtag', as: 'hasher', onDelete: 'cascade' });
 
 module.exports = db;

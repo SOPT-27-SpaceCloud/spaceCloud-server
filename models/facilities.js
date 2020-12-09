@@ -1,7 +1,11 @@
 module.exports = (sequelize, DataTypes) => {
-    return sequelize.define('Banner', {
-        bannerImageUrl: {
+    return sequelize.define('Facilities', {
+        iconImageUrl: {
             type: DataTypes.STRING(200),
+            allowNull: false,
+        },
+        contents: {
+            type: DataTypes.STRING(100),
             allowNull: false,
         }
     }, {
