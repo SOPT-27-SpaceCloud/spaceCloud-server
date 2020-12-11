@@ -1,4 +1,6 @@
-const { Banner } = require('../models');
+const {
+    Banner
+} = require('../models');
 
 module.exports = {
     uploadBannerImage: async (image) => {
@@ -11,7 +13,12 @@ module.exports = {
             throw err;
         }
     },
-
     /* 배너 사진 조회 API 개발 */
-}
+    bannerReadAll: async () => {
+        const bannerImages = await Banner.findAll({
+            attributes: ['bannerImageUrl']
+        });
 
+        return bannerImages;
+    }
+}

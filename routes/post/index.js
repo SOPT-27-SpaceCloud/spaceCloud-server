@@ -7,7 +7,7 @@ const multerController = require('../../controller/multerController');
 // Post
 router.post('/', upload.single('image'), postController.createPost);
 router.get('/', postController.readAllPost);
-// router.get();
+router.get('/find', postController.readAllPostByCategory);
 
 // PostDetail
 router.post('/detail/:postId', upload.array('images', 5), postController.createPostDetail, multerController.uploadImages);

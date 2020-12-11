@@ -6,7 +6,7 @@ const logger = require('morgan');
 const cors = require('cors');
 const { sequelize } = require('./models');
 
-sequelize.sync({ alter: true })
+sequelize.sync({ })
 .then(() => {
   console.log('데이터베이스 연결 성공.');
 })

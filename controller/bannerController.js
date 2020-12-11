@@ -8,7 +8,13 @@ module.exports = {
     readAllBanner: async (req, res) => {
         try{
             const getReadAllBanner = await bannerService.bannerReadAll();
-            return res.status(sc.OK).send(ut.success(sc.OK, rm.READ_BANNER_IMAGE_SUCCESS, getReadAllBanner));
+            let urlList = [];
+
+            for(let banner of getReadAllBanner) {
+                urlList.push(banner.bannerImageUrl);
+            }
+
+            return res.status(sc.OK).send(ut.success(sc.OK, rm.READ_BANNER_IMAGE_SUCCESS, urlList));
         } catch (err) {
             return res.status(sc.INTERNAL_SERVER_ERROR).send(ut.fail(sc.INTERNAL_SERVER_ERROR, rm.READ_BANNER_IMAGE_FAIL));
         }
