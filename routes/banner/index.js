@@ -6,8 +6,6 @@ const multerController = require('../../controller/multerController');
 
 
 router.post('/upload', upload.single('image'), multerController.uploadImage);
-
-// router.get();
 router.get('/', bannerController.readAllBanner);
 
 module.exports = router;

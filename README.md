@@ -1,1 +1,128 @@
-# spaceCloud-server
+<div align="center">
+
+  <img height="50" width="120" src="https://user-images.githubusercontent.com/59385491/99065767-39ab4500-25eb-11eb-9490-9d2a4202dd96.png">
+
+  # 대학생 연합 IT벤처 창업 동아리 SOPT
+
+  <img height="220" width="250" src="https://user-images.githubusercontent.com/59385491/101639763-05546880-3a73-11eb-9091-ce057dc957bc.png">
+
+  <h2> 🧑🏻‍💻 SOPT 클라이언트 합동 세미나</h2>
+  <h3>공간 예약 서비스 스페이스클라우드 서버 구현</h3>
+
+</div>
+
+
+<br>
+
+## 💁🏻 소개
+
+이 레포지토리는 [ON-SOPT](http://sopt.org/wp/?page_id=2519) 27기 서버파트와 클라이언트 파트가 협업하는 합동세미나 내용을 정리하고자 만들어졌습니다. 
+
+-   일정 : 2020년 12월 05일(토)
+-   스페이스클라우드 API 구현 및 DB 설계
+
+<br>
+
+## 📕 API Docs
+
+- [API Description Link](https://github.com/SOPT-27-SpaceCloud/spaceCloud-server/wiki)
+
+<br>
+
+## 🔧 Credit
+- **Language** : JavaScript
+- **Library** & Framework : Node.js
+- **Database** : AWS RDS
+- **ORM** : Sequelize
+- **Deploy** : AWS EC2
+
+<br>
+
+## 💼 Database Modeling 
+
+- ERD(Entity Relation Diagram)
+
+<<img width="655" alt="스페이스클라우드 ERD" src="https://user-images.githubusercontent.com/59385491/101878354-c0474800-3bd2-11eb-9673-799c0a60e7f3.png">
+
+## 💻 Develop
+
+```
+$ git clone https://github.com/SOPT-27-SpaceCloud/spaceCloud-server.git
+$ cd [project-name]
+$ npm install
+$ npm start
+```
+
+(단, 암호 키와 같이 보안이 필요한 파일에 대해서는 Github에 업로드 되어 있지 않습니다.)
+
+## 🗂 models/index.js
+
+```javascript
+/* Post */
+db.Post = require('./post')(sequelize, Sequelize);
+db.PostDetail = require('./postDetail')(sequelize, Sequelize);
+db.Facilities = require('./facilities')(sequelize, Sequelize);
+db.PostDetailSelect = require('./postDetailSelect')(sequelize, Sequelize);
+db.Hashtag = require('./hashtag')(sequelize, Sequelize);
+db.PostDetailImage = require('./postDetailImage')(sequelize, Sequelize);
+db.PostHashtag = require('./postHashtag')(sequelize, Sequelize);
+
+/* Banner */
+db.Banner = require('./banner')(sequelize, Sequelize);
+
+/** 1 : 1   Post : PostDetail */
+db.Post.hasOne(db.PostDetail, { onDelete: 'cascade' });
+db.PostDetail.belongsTo(db.Post);
+
+/** 1 : 1   Post : PostDetailSelect */
+db.Post.hasOne(db.PostDetailSelect, { onDelete: 'cascade' });
+db.PostDetailSelect.belongsTo(db.Post);
+
+/** 1 : N   PostDetail : PostDetailImage */
+db.PostDetail.hasMany(db.PostDetailImage, { onDelete: 'cascade' });
+db.PostDetailImage.belongsTo(db.PostDetail);
+
+/** 1 : N   PostDetail : Facilities */
+db.PostDetail.hasMany(db.Facilities, {onDelete: 'cascade' })
+db.Facilities.belongsTo(db.PostDetail);
+
+/** 1 : N   PostDetail : Hashtag */
+db.PostDetail.hasMany(db.Hashtag, {onDelete: 'cascade' })
+db.Hashtag.belongsTo(db.PostDetail);
+
+/** N : M   Post : PostDetail => Hashtag */
+db.Post.belongsToMany(db.Hashtag, { through: 'PostHashtag', onDelete: 'cascade' });
+db.Hashtag.belongsToMany(db.Post, { through: 'PostHashtag', onDelete: 'cascade' });
+```
+
+## 🏷 config/config.json
+
+```javascript
+{
+  "development": {
+    "username": "---",
+    "password": "---",
+    "database": "---",
+    "host": "---",
+    "dialect": "mysql"
+  }
+}
+```
+
+## 🏷 config/s3.json
+
+```javascript
+{
+    "accessKeyId": "---",
+    "secretAccessKey": "---",
+    "region": "---"
+}
+```
+
+<br>
+
+## 🎙 Contributor
+
+- ⭐️[박상수](https://github.com/epitoneproject)
+- ⭐️[오승재]()
+- ⭐️[석영현]()

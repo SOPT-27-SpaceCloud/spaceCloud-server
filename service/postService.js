@@ -1,12 +1,11 @@
-const { Post, PostDetail, PostDetailSelect, Hashtag, Facilities, PostDetailImage } = require('../models');
+const { Post, PostDetail, PostDetailSelect, Hashtag, Facilities, PostDetailImage, PostHashtag } = require('../models');
 
 module.exports = {
     // Post Service
-    createPost: async (title, contents, address, price, image, category) => {
+    createPost: async (title, address, price, image, category) => {
         try {
             const createPost = await Post.create({
                 title,
-                contents,
                 address,
                 price,
                 postImageUrl: image,
@@ -25,29 +24,29 @@ module.exports = {
             throw err;
         }
     },
-
-    /* 선택된 공간 조회 API 개발 */
-    readAllPostByCategory: async(category) => {
+    findAllPost: async (category) => {
         try {
-            const readAllPostByCategory = await Post.findAll({
+            const findAllPost = await Post.findAll({
                 where: {
                     category
                 },
-                attributes: { exclude: ['id'] }
-            });
-            return readAllPostByCategory;
+                include: [{
+                    model: Hashtag
+                }]
+            })
+            return findAllPost
         } catch (err) {
             throw err;
         }
     },
 
-
     // PostDetail Service
 
     // POST PostDetail 
-    createPostDetail: async (introducedPlace, openingHours, closedDays, notice, postId) => {
+    createPostDetail: async (contents, introducedPlace, openingHours, closedDays, notice, postId) => {
         try {
             const createPostDetail = await PostDetail.create({
+                contents,
                 introducedPlace,
                 openingHours,
                 closedDays,
@@ -89,10 +88,21 @@ module.exports = {
             const findPostDetailId = await PostDetail.findOne({
                 where: {
                     PostId: postId
-                },
-                attributes: ['id']
+                }
             })
             return findPostDetailId
+        } catch (err) {
+            throw err;
+        }
+    },
+    findPostDetailImageId: async (postDetailId) => {
+        try {
+            const findPostDetailImageId = await PostDetailImage.findOne({
+                where: {
+                    PostDetailId: postDetailId
+                }
+            })
+            return findPostDetailImageId
         } catch (err) {
             throw err;
         }
@@ -108,12 +118,15 @@ module.exports = {
                 include: [{
                     model: PostDetailImage,
                     attributes: ['postImageUrl']
-                },
-                /* 편의시설 테이블 join해서 출력되게 해주세요!  */
-                {
+                }, {
+                    model: Facilities,
+                    attributes: ['iconImageUrl', 'contents'] 
+                }, {
                     model: Post,
-                    as: 'hasher',
                     attributes: { exclude : ['id', 'contents', 'address', 'price', 'postImageUrl', 'category' ]}
+                }, {
+                    model: Hashtag,
+                    attributes: { exclude: ['id', 'PostDetailId']}
                 }]
             })
             return findPostDetailId;
@@ -164,44 +177,40 @@ module.exports = {
     },
 
     // POST Facilities
-    createFacilities: async (image, contents, postId) => {
+    createFacilities: async (image, contents, postDetailId) => {
         try {
             const createFacilities = await Facilities.create({
                 iconImageUrl: image,
                 contents,
-                PostDetailId: postId
+                PostDetailId: postDetailId
             })
             return createFacilities;
         } catch (err) {
             throw err;
         }
     },
-    findFacilitiesId: async (postId) => {
-        try {
-            const findFacilitiesId = await PostDetail.findOne({
-                where: {
-                    id: postId
-                },
-                attributes: ['id']
-            })
-            return findFacilitiesId
-        } catch (err) {
-            throw err;
-        }
-    },
 
     // POST Hashtag
-    createHashtag: async (postId, postDetailId, tag) => {
+    createHashtag: async (tag, postDetailId) => {
         try {
             const createHashtag = await Hashtag.create({
-                PostId: postId,
-                PostDetailId: postDetailId,
-                tag
+                tag,
+                PostDetailId: postDetailId
             })
             return createHashtag;
         } catch (err) {
             throw err;
         }
+    },
+    createPostHashtag: async (postId, hashtagId) => {
+        try {
+            const createPostHashtag = await PostHashtag.create({
+                PostId: postId,
+                HashtagId: hashtagId
+            })
+            return createPostHashtag;
+        } catch (err) {
+            throw err;
+        }
     }
-
 }
