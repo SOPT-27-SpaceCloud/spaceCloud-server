@@ -42,7 +42,7 @@
 
 - ERD(Entity Relation Diagram)
 
-<<img width="655" alt="스페이스클라우드 ERD" src="https://user-images.githubusercontent.com/59385491/101878354-c0474800-3bd2-11eb-9673-799c0a60e7f3.png">
+<img width="655" alt="스페이스클라우드 ERD" src="https://user-images.githubusercontent.com/59385491/101878354-c0474800-3bd2-11eb-9673-799c0a60e7f3.png">
 
 ## 💻 Develop
 
