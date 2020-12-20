@@ -30,7 +30,8 @@ module.exports = {
         }
     },
     findAllPost: async (req, res) => {
-        const { category } = req.body;
+        console.log(req.query);
+        const { category } = req.query;
             if (!category) {
                 console.log('카테고리 입력값이 없습니다.');
                 return res.status(sc.BAD_REQUEST).send(ut.fail(sc.BAD_REQUEST, rm.NULL_VALUE));
